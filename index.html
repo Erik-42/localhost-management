@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dossier www local</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script defer src="./script-common.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/ashes.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap"
+    />
+  </head>
+
+  <body>
+    <header>
+      <h1>Contenu du dossier www local</h1>
+      <p>Gestion du dossier www local</p>
+    </header>
+
+    <main class="main-content">
+      <div class="file-browser">
+        <div class="file-item" data-is-text="true" data-file-path="README.md">
+          <h3>Infos</h3>
+          <span>Infos sur le serveur web local</span>
+          <ul>
+            <li>
+              <div class="file">
+                <a href="./dashboard.local/index.html">Dashboard projects</a>
+                <span> : Dashboard des projets locaux</span>
+              </div>
+            </li>
+            <li>
+              <div class="file">
+                <a href="./README.md">Documentations</a>
+                <span> : Notice de l'administration</span>
+              </div>
+            </li>
+            <li>
+              <div class="file">
+                <a href="./admin/tools/info.php">Infos PHP</a>
+                <span> : Informations sur PHP</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="file-item">
+          <h3>Tools</h3>
+          <span>Outils d'administration des projets locaux</span>
+          <ul>
+            <li>
+              <div class="file">
+                <a href="../admin/scripts/create-vhost.sh">create-vhost</a>
+                <span> : Script pour créer l'hôte virtuel d'un projet</span>
+                <button
+                  class="run-script"
+                  data-script="../admin/scripts/create-vhost.sh"
+                >
+                  Run create-vhost
+                </button>
+              </div>
+            </li>
+            <li>
+              <div class="file">
+                <a href="../admin/scripts/create-vhost.sh"
+                  >create-local-projects</a
+                >
+                <span> : Script pour créer l'hôte virtuel d'un projet</span>
+                <button
+                  class="run-script"
+                  data-script="../admin/scripts/create-local-projects.sh"
+                >
+                  Run create-local-projects
+                </button>
+              </div>
+            </li>
+            <li>
+              <div class="file">
+                <a href="../admin/scripts/export-project-structure-v1.js"
+                  >Structure projet</a
+                >
+                <span> : Script pour exporter la structure d'un projet</span>
+                <button
+                  class="run-script"
+                  data-script="../admin/scripts/export-project-structure-v1.js"
+                >
+                  Run export-project-structure-v1
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="file-item">
+          <h3>Scripts</h3>
+          <span>Scripts disponibles</span>
+          <ul id="scripts-list">
+            <li>
+              <div class="file">
+                <button
+                  class="run-script"
+                  data-script="../admin/scripts/export-project-structure-v1.js"
+                >
+                  Exporter la structure du projet
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="file-item">
+          <h3>Api</h3>
+          <span>Api d'administration des projets locaux</span>
+          <ul>
+            <li>
+              <div class="file">
+                <a href="../api/">API</a>
+              </div>
+            </li>
+            <li>
+              <div class="file">
+                <a href="../api/api-1/index.html">API 1</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="file-item">
+          <h3>Projets locaux</h3>
+          <span>Les projets locaux en cours</span>
+          <ul id="projects-list">
+            <li>
+              <div class="file">
+                <a href="./tcrnrc.local/index.html">TCR'n RC</a>
+              </div>
+            </li>
+            <li>
+              <div class="file">
+                <a href="./projet-2.local/index.html">Projet 2</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <p>
+        © 2025-<span id="current-year"></span> Basille_Corp. Tous droits
+        réservés.
+      </p>
+    </footer>
+  </body>
+</html>
+
