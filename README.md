@@ -2,7 +2,7 @@
 
 Un outil web moderne pour la gestion de votre serveur local. Cette interface intuitive vous permet de gérer facilement vos sites et applications locaux.
 
-![Screenshot](screenshot.png)
+![Screenshot](assets/logo/logo.png)
 
 ## Fonctionnalités
 
@@ -21,6 +21,7 @@ Un outil web moderne pour la gestion de votre serveur local. Cette interface int
 ## Installation
 
 1. Clonez ce dépôt :
+
 ```bash
 git clone https://github.com/Erik-42/localhost-management.git
 ```
