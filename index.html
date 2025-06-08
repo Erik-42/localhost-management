@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dossier www local</title>
-    <link rel="stylesheet" href="./style.css" />
-    <script defer src="./script-common.js"></script>
+    <link rel="stylesheet" href="./style/style.css" />
+    <script defer src="./js/script-common.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link
       rel="stylesheet"
@@ -55,11 +55,11 @@
           <ul>
             <li>
               <div class="file">
-                <a href="../admin/scripts/create-vhost.sh">create-vhost</a>
+                <a href="./scripts/create_host.sh">create_host</a>
                 <span> : Script pour créer l'hôte virtuel d'un projet</span>
                 <button
                   class="run-script"
-                  data-script="../admin/scripts/create-vhost.sh"
+                  data-script="./scripts/create_host.sh"
                 >
                   Run create-vhost
                 </button>
@@ -67,8 +67,8 @@
             </li>
             <li>
               <div class="file">
-                <a href="../admin/scripts/create-vhost.sh"
-                  >create-local-projects</a
+                <a href="./scripts/create_local_projects.sh"
+                  >create_local_projects</a
                 >
                 <span> : Script pour créer l'hôte virtuel d'un projet</span>
                 <button
@@ -81,13 +81,13 @@
             </li>
             <li>
               <div class="file">
-                <a href="../admin/scripts/export-project-structure-v1.js"
+                <a href="./scripts/export-project-structure-v1.js"
                   >Structure projet</a
                 >
                 <span> : Script pour exporter la structure d'un projet</span>
                 <button
                   class="run-script"
-                  data-script="../admin/scripts/export-project-structure-v1.js"
+                  data-script="./scripts/export-project-structure-v1.js"
                 >
                   Run export-project-structure-v1
                 </button>
@@ -103,7 +103,7 @@
               <div class="file">
                 <button
                   class="run-script"
-                  data-script="../admin/scripts/export-project-structure-v1.js"
+                  data-script="./scripts/export-project-structure-v1.js"
                 >
                   Exporter la structure du projet
                 </button>
