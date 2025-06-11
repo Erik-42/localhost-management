@@ -8,88 +8,11 @@ function list_projects() {
     find "$WWW_PATH" -maxdepth 1 -type d -name "*.local" -exec basename {} \;
 }
 
-function install_php_version() {
-    local version="$1"
-    
-    # Vérifier si la version est déjà installée
-    if command -v "php$version" &> /dev/null; then
-        echo "PHP $version est déjà installé."
-        return 0
-    fi
-    
-    # Mise à jour des dépôts
-    sudo apt update
-    
-    # Installation des dépendances
-    sudo apt install -y software-properties-common
-    
-    # Ajout du dépôt PHP
-    sudo add-apt-repository -y ppa:ondrej/php
-    sudo apt update
-    
-    # Installation de PHP et des extensions courantes
-    sudo apt install -y "php$version" \
-        "php$version-cli" \
-        "php$version-fpm" \
-        "php$version-curl" \
-        "php$version-mysql" \
-        "php$version-mbstring" \
-        "php$version-xml" \
-        "php$version-zip"
-    
-    # Configuration Apache
-    sudo a2dismod php*
-    sudo a2enmod "php$version"
-    sudo systemctl restart apache2
-    
-    echo "✅ PHP $version installé avec succès."
-}
-
 function create_project() {
     read -p "Nom du projet (sans .local) : " name
     domain="${name}.local"
     read -p "Port (par défaut 80) : " port
     port=${port:-80}
-    
-    # Versions PHP disponibles et installées
-    available_php_versions=($(ls /usr/bin/php* | grep -oP 'php\d+\.\d+$' | sort -V))
-    
-    # Liste de suggestions de versions PHP
-    php_suggestions=(
-        "8.2"  # Version stable actuelle
-        "8.1"  # Version précédente stable
-        "7.4"  # Version legacy encore supportée
-        "8.3"  # Version de développement
-    )
-    
-    echo "Versions PHP disponibles :"
-    for i in "${!available_php_versions[@]}"; do
-        echo "$((i+1)). ${available_php_versions[i]}"
-    done
-    
-    echo "Suggestions de versions PHP :"
-    for j in "${!php_suggestions[@]}"; do
-        echo "$((${#available_php_versions[@]}+j+1)). PHP ${php_suggestions[j]}"
-    done
-    
-    echo "$((${#available_php_versions[@]}+${#php_suggestions[@]}+1)). Autre version personnalisée"
-    
-    read -p "Choisissez le numéro de la version PHP (défaut: dernière version) : " php_version_choice
-    
-    if [[ -z "$php_version_choice" ]]; then
-        php_version="${available_php_versions[-1]}"
-    elif [[ "$php_version_choice" -le $((${#available_php_versions[@]})) ]]; then
-        php_version="${available_php_versions[$((php_version_choice-1))]}"
-    elif [[ "$php_version_choice" -le $((${#available_php_versions[@]}+${#php_suggestions[@]})) ]]; then
-        suggested_version="${php_suggestions[$((php_version_choice-${#available_php_versions[@]}-1))]}"
-        install_php_version "$suggested_version"
-        php_version="php$suggested_version"
-    else
-        read -p "Entrez la version PHP à installer (ex: 8.2) : " custom_version
-        install_php_version "$custom_version"
-        php_version="php$custom_version"
-    fi
-    
     project_path="$WWW_PATH/$domain"
     vhost_file="$SITES_PATH/$domain.conf"
 
@@ -103,34 +26,16 @@ function create_project() {
     echo "Créé automatiquement le $(date)." >> "$project_path/README.md"
 
     cat <<EOF > "$project_path/index.html"
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head><title>$domain</title></head>
   <body>
     <h1>Bienvenue sur $domain</h1>
-        <h3># Projet $domain</h3>
-        <a href="./index.php">Accés à la page PHP</a>
-<footer>
-    <p>Page HTML de test    
-        <pre>$(cat "$project_path/README.md")</pre>
-    </p>
-</footer>
+    <pre>$(cat "$project_path/README.md")</pre>
   </body>
 </html>
 EOF
 
-cat <<EOF > "$project_path/index.php"
-<?php echo "Bienvenue sur $domain !"; ?>
-<?php echo " 127.0.0.1 localhost"; ?>
-<?php echo " Vous êtes dans le dossier $domain"; ?>
-<?php echo " PHP fonctionne !"; ?>
-<?php echo " Version PHP : " . PHP_VERSION; ?>
-<?php phpinfo(); ?>
-EOF
-
-cat <<EOF > "$project_path/info.php"
-<?php phpinfo(); ?>
-EOF
     chmod -R 755 "$project_path"
     chown -R "$USER:$USER" "$project_path"
 
@@ -149,10 +54,6 @@ EOF
         Require all granted
     </Directory>
 
-    <FilesMatch \.php$>
-        SetHandler "proxy:unix:/var/run/php/${php_version}-fpm.sock|fcgi://localhost"
-    </FilesMatch>
-
     ErrorLog \${APACHE_LOG_DIR}/${domain}-error.log
     CustomLog \${APACHE_LOG_DIR}/${domain}-access.log combined
 </VirtualHost>
@@ -165,7 +66,7 @@ EOF
     sudo a2ensite "${domain}.conf"
     sudo systemctl reload apache2
 
-    echo "✅ Projet http://$domain:$port créé avec succès (PHP $php_version)."
+    echo "✅ Projet http://$domain:$port créé avec succès."
 }
 
 function modify_project() {
@@ -299,3 +200,4 @@ function main_menu() {
 }
 
 main_menu
+
