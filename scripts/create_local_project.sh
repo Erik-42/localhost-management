@@ -14,20 +14,30 @@ function install_php_version() {
     # Vérifier si la version est déjà installée
     if command -v "php$version" &> /dev/null; then
         echo "PHP $version est déjà installé."
+        # Vérifier si PHP-FPM est actif pour cette version
+        if ! systemctl is-active --quiet "php$version-fpm"; then
+            echo "⚠️  PHP-FPM $version n'est pas actif. Démarrage..."
+            sudo systemctl start "php$version-fpm"
+            sudo systemctl enable "php$version-fpm"
+        fi
         return 0
     fi
     
     # Mise à jour des dépôts
+    echo "📦 Mise à jour des dépôts..."
     sudo apt update
     
     # Installation des dépendances
+    echo "🔧 Installation des dépendances..."
     sudo apt install -y software-properties-common
     
     # Ajout du dépôt PHP
+    echo "➕ Ajout du dépôt PHP..."
     sudo add-apt-repository -y ppa:ondrej/php
     sudo apt update
     
     # Installation de PHP et des extensions courantes
+    echo "⚙️  Installation de PHP $version..."
     sudo apt install -y "php$version" \
         "php$version-cli" \
         "php$version-fpm" \
@@ -37,12 +47,33 @@ function install_php_version() {
         "php$version-xml" \
         "php$version-zip"
     
-    # Configuration Apache
-    sudo a2dismod php*
-    sudo a2enmod "php$version"
+    # Vérification et activation des modules Apache nécessaires
+    echo "🔌 Vérification des modules Apache..."
+    required_modules=("proxy_fcgi" "setenvif")
+    
+    for module in "${required_modules[@]}"; do
+        if ! a2query -m "$module" &> /dev/null; then
+            echo "🔄 Activation du module $module..."
+            sudo a2enmod "$module"
+        fi
+    done
+    
+    # Configuration PHP-FPM
+    echo "🚀 Démarrage de PHP-FPM $version..."
+    sudo systemctl start "php$version-fpm"
+    sudo systemctl enable "php$version-fpm"
+    
+    # Vérification du statut de PHP-FPM
+    if ! systemctl is-active --quiet "php$version-fpm"; then
+        echo "❌ Échec du démarrage de PHP-FPM $version"
+        return 1
+    fi
+    
+    # Redémarrage d'Apache pour appliquer les changements
+    echo "🔄 Redémarrage d'Apache..."
     sudo systemctl restart apache2
     
-    echo "✅ PHP $version installé avec succès."
+    echo "✅ PHP $version installé et configuré avec succès."
 }
 
 function create_project() {
