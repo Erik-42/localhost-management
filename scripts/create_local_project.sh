@@ -115,29 +115,47 @@ function create_project() {
     echo "Créé automatiquement le $(date)." >> "$project_path/README.md"
 
     cat <<EOF > "$project_path/index.html"
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
-  <head><title>$domain</title></head>
+  <head>
+    <meta charset="UTF-8">
+    <title>$domain</title>
+  </head>
   <body>
     <h1>Bienvenue sur $domain</h1>
-        <h3># Projet $domain</h3>
-        <a href="./index.php">Accés à la page PHP</a>
-<footer>
-    <p>Page HTML de test    
+    <h3># Projet $domain</h3>
+    <a href="./index.php">Accès à la page PHP</a>
+    <footer>
+      <p>Page HTML de test
         <pre>$(cat "$project_path/README.md")</pre>
-    </p>
-</footer>
+      </p>
+    </footer>
   </body>
 </html>
 EOF
 
 cat <<EOF > "$project_path/index.php"
-<?php echo "Bienvenue sur $domain !"; ?>
-<?php echo " 127.0.0.1 localhost"; ?>
-<?php echo " Vous êtes dans le dossier $domain"; ?>
-<?php echo " PHP fonctionne !"; ?>
-<?php echo " Version PHP : " . PHP_VERSION; ?>
-<?php phpinfo(); ?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>$domain - PHP Info</title>
+  </head>
+  <body>
+    <h1>Bienvenue sur $domain</h1>
+    <p>Voici les informations PHP :</p>
+    <pre>
+<?php 
+echo "Bienvenue sur $domain !\n";
+echo "127.0.0.1 localhost\n";
+echo "Vous êtes dans le dossier $domain\n";
+echo "PHP fonctionne !\n";
+echo "Version PHP : " . PHP_VERSION . "\n";
+?>
+    </pre>
+    <?php phpinfo(); ?>
+  </body>
+</html>
 EOF
 
 cat <<EOF > "$project_path/info.php"
