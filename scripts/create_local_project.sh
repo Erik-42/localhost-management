@@ -178,6 +178,10 @@ EOF
     sudo systemctl reload apache2
 
     echo "✅ Projet http://$domain:$port créé avec succès (PHP $php_version)."
+    
+    # Mise à jour du dashboard
+    echo "🔄 Mise à jour du dashboard..."
+    generate_dashboard
 }
 
 function modify_project() {
@@ -217,6 +221,10 @@ function modify_project() {
     sudo systemctl reload apache2
 
     echo "✅ Projet modifié avec succès : http://$new_domain:$new_port"
+    
+    # Mise à jour du dashboard
+    echo "🔄 Mise à jour du dashboard..."
+    generate_dashboard
 }
 
 function delete_project() {
@@ -238,6 +246,10 @@ function delete_project() {
     sudo systemctl reload apache2
 
     echo "🗑️ Projet $domain supprimé avec succès."
+    
+    # Mise à jour du dashboard
+    echo "🔄 Mise à jour du dashboard..."
+    generate_dashboard
 }
 
 function generate_dashboard() {
