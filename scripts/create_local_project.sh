@@ -53,41 +53,22 @@ function create_project() {
     
     # Versions PHP disponibles et installées
     available_php_versions=($(ls /usr/bin/php* | grep -oP 'php\d+\.\d+$' | sort -V))
-    
-    # Liste de suggestions de versions PHP
-    php_suggestions=(
-        "8.2"  # Version stable actuelle
-        "8.1"  # Version précédente stable
-        "7.4"  # Version legacy encore supportée
-        "8.3"  # Version de développement
-    )
-    
     echo "Versions PHP disponibles :"
     for i in "${!available_php_versions[@]}"; do
         echo "$((i+1)). ${available_php_versions[i]}"
     done
-    
-    echo "Suggestions de versions PHP :"
-    for j in "${!php_suggestions[@]}"; do
-        echo "$((${#available_php_versions[@]}+j+1)). PHP ${php_suggestions[j]}"
-    done
-    
-    echo "$((${#available_php_versions[@]}+${#php_suggestions[@]}+1)). Autre version personnalisée"
+    echo "$((${#available_php_versions[@]}+1)). Installer une nouvelle version"
     
     read -p "Choisissez le numéro de la version PHP (défaut: dernière version) : " php_version_choice
     
     if [[ -z "$php_version_choice" ]]; then
         php_version="${available_php_versions[-1]}"
-    elif [[ "$php_version_choice" -le $((${#available_php_versions[@]})) ]]; then
-        php_version="${available_php_versions[$((php_version_choice-1))]}"
-    elif [[ "$php_version_choice" -le $((${#available_php_versions[@]}+${#php_suggestions[@]})) ]]; then
-        suggested_version="${php_suggestions[$((php_version_choice-${#available_php_versions[@]}-1))]}"
-        install_php_version "$suggested_version"
-        php_version="php$suggested_version"
-    else
+    elif [[ "$php_version_choice" -eq $((${#available_php_versions[@]}+1)) ]]; then
         read -p "Entrez la version PHP à installer (ex: 8.2) : " custom_version
         install_php_version "$custom_version"
         php_version="php$custom_version"
+    else
+        php_version="${available_php_versions[$((php_version_choice-1))]}"
     fi
     
     project_path="$WWW_PATH/$domain"
