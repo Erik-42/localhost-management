@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dossier www local</title>
+    <title>Gestionnaire de Projets Locaux en PHP (dossier www)</title>
     <link rel="stylesheet" href="./style/style.css" />
+    <link rel="stylesheet" href="./style/style-index.css" />
     <script defer src="./js/script-common.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link
@@ -24,132 +25,121 @@
     </header>
 
     <main class="main-content">
-      <div class="file-browser">
-        <div class="file-item" data-is-text="true" data-file-path="README.md">
-          <h3>Infos</h3>
-          <span>Infos sur le serveur web local</span>
-          <ul>
-            <li>
-              <div class="file">
-                <a href="./dashboard.local/index.html">Dashboard projects</a>
-                <span> : Dashboard des projets locaux</span>
-              </div>
-            </li>
-            <li>
-              <div class="file">
-                <a href="./README.md">Documentations</a>
-                <span> : Notice de l'administration</span>
-              </div>
-            </li>
-            <li>
-              <div class="file">
-                <a href="./tools/info.php">Infos PHP</a>
-                <span> : Informations sur PHP</span>
-              </div>
-            </li>
-          </ul>
+      <div class="dashboard">
+        <div class="card">
+          <h3>Serveur Web</h3>
+          <div class="status-line">
+            <span class="status-badge active"></span>
+            <span>Apache</span>
+          </div>
+          <p>Version: <span id="apache-version">Chargement...</span></p>
         </div>
-        <div class="file-item">
-          <h3>Tools</h3>
-          <span>Outils d'administration des projets locaux</span>
-          <ul>
-            <li>
-              <div class="file">
-                <a href="./scripts/create_host.sh">create_host</a>
-                <span> : Script pour créer l'hôte virtuel d'un projet</span>
-                <button
-                  class="run-script"
-                  data-script="./scripts/create_host.sh"
-                >
-                  Run create-vhost
-                </button>
-              </div>
-            </li>
-            <li>
-              <div class="file">
-                <a href="./scripts/create_local_projects.sh"
-                  >create_local_projects</a
-                >
-                <span> : Script pour créer l'hôte virtuel d'un projet</span>
-                <button
-                  class="run-script"
-                  data-script="../admin/scripts/create-local-projects.sh"
-                >
-                  Run create-local-projects
-                </button>
-              </div>
-            </li>
-            <li>
-              <div class="file">
-                <a href="./scripts/export-project-structure-v1.js"
-                  >Structure projet</a
-                >
-                <span> : Script pour exporter la structure d'un projet</span>
-                <button
-                  class="run-script"
-                  data-script="./scripts/export-project-structure-v1.js"
-                >
-                  Run export-project-structure-v1
-                </button>
-              </div>
-            </li>
-          </ul>
+
+        <div class="card">
+          <h3>PHP</h3>
+          <div class="status-line">
+            <span class="status-badge active" id="php-status"></span>
+            <span>PHP</span>
+          </div>
+          <p>Version: <span id="php-version">Chargement...</span></p>
         </div>
-        <div class="file-item">
-          <h3>Scripts</h3>
-          <span>Scripts disponibles</span>
-          <ul id="scripts-list">
-            <li>
-              <div class="file">
-                <button
-                  class="run-script"
-                  data-script="./scripts/export-project-structure-v1.js"
-                >
-                  Exporter la structure du projet
-                </button>
-              </div>
-            </li>
-          </ul>
+
+        <div class="card">
+          <h3>Base de données</h3>
+          <div class="status-line">
+            <span class="status-badge inactive" id="mysql-status"></span>
+            <span>MySQL</span>
+          </div>
+          <p>Version: <span id="mysql-version">Non détectée</span></p>
         </div>
-        <div class="file-item">
-          <h3>Api</h3>
-          <span>Api d'administration des projets locaux</span>
-          <ul>
-            <li>
-              <div class="file">
-                <a href="../api/">API</a>
-              </div>
-            </li>
-            <li>
-              <div class="file">
-                <a href="../api/api-1/index.html">API 1</a>
-              </div>
-            </li>
-          </ul>
+
+        <div class="card">
+          <h3>Système</h3>
+          <div class="status-line">
+            <span class="status-badge active"></span>
+            <span>Serveur</span>
+          </div>
+          <p id="os-info">Chargement des informations système...</p>
         </div>
-        <div class="file-item">
-          <h3>Projets locaux</h3>
-          <span>Les projets locaux en cours</span>
-          <ul id="projects-list">
-            <li>
-              <div class="file">
-                <a href="./tcrnrc.local/index.html">TCR'n RC</a>
-              </div>
-            </li>
-            <li>
-              <div class="file">
-                <a href="./projet-2.local/index.html">Projet 2</a>
-              </div>
-            </li>
-          </ul>
+      </div>
+
+      <div class="projects-section">
+        <h2>Projets Locaux</h2>
+        <div class="projects-grid" id="projects-list">
+          <!-- Les projets seront chargés ici par JavaScript -->
+        </div>
+      </div>
+
+      <div class="tools-section">
+        <h2>Outils</h2>
+        <div class="tools-grid">
+          <a href="/dashboard.local" class="tool-card">
+            <h3>Dashboard</h3>
+            <p>Tableau de bord des projets</p>
+          </a>
+          <a href="/tools/info.php" class="tool-card">
+            <h3>PHP Info</h3>
+            <p>Informations détaillées PHP</p>
+          </a>
+          <a href="scripts/create_local_project.sh" class="tool-card">
+            <h3>Créer un projet</h3>
+            <p>Lancer le script de création</p>
+          </a>
         </div>
       </div>
     </main>
+
     <footer>
       <p>
-        © 2025-<span id="current-year"></span> Basille_Corp. Tous droits
+        2025-<span id="current-year"></span> Localhost Manager. Tous droits
         réservés.
       </p>
     </footer>
+
+    <script>
+      // Mise à jour de l'année du copyright
+      document.getElementById("current-year").textContent =
+        new Date().getFullYear();
+
+      // Fonction pour charger les informations du serveur
+      async function loadServerInfo() {
+        try {
+          // Charger les informations PHP
+          const phpInfo = await fetch("/tools/info.php?json")
+            .then((response) => response.json())
+            .catch(() => ({}));
+
+          if (phpInfo.PHP_VERSION) {
+            document.getElementById("php-version").textContent =
+              phpInfo.PHP_VERSION;
+            document.getElementById("php-status").className =
+              "status-badge active";
+          }
+
+          // Charger la liste des projets
+          const projects = await fetch("/dashboard.local/projects.json")
+            .then((response) => response.json())
+            .catch(() => []);
+
+          const projectsList = document.getElementById("projects-list");
+          projectsList.innerHTML = projects
+            .map(
+              (project) => `
+            <a href="http://${project.domain}" class="project-card">
+              <h3>${project.name}</h3>
+              <p>PHP: ${project.php || "N/A"}</p>
+              <span class="project-link">Ouvrir →</span>
+            </a>
+          `
+            )
+            .join("");
+        } catch (error) {
+          console.error("Erreur lors du chargement des informations:", error);
+        }
+      }
+
+      // Charger les informations au démarrage
+      document.addEventListener("DOMContentLoaded", loadServerInfo);
+    </script>
   </body>
 </html>
